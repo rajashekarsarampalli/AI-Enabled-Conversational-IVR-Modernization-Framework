@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Springs Hospital IVR Simulator</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="simulator">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏥 Springs Hospital</h1>
+            <p>AI Conversational IVR Simulator</p>
+        </div>
+
+        <!-- Mode Switch -->
+        <div class="mode-switch">
+            <button class="mode-btn active" id="chatModeBtn">💬 Chat Mode</button>
+            <button class="mode-btn" id="keypadModeBtn">🔢 Keypad Mode</button>
+        </div>
+
+        <!-- Debug Panel (toggle) -->
+        <div class="debug-toggle">
+            <label><input type="checkbox" id="debugToggle"> Show Debug Panel</label>
+        </div>
+        <div class="debug-panel" id="debugPanel">
+            <h3>Debug Info</h3>
+            <div id="debugContent">
+                <p><strong>State:</strong> <span id="dbgState">—</span></p>
+                <p><strong>Intent:</strong> <span id="dbgIntent">—</span></p>
+                <p><strong>Source:</strong> <span id="dbgSource">—</span></p>
+                <p><strong>Phone:</strong> <span id="dbgPhone">—</span></p>
+                <p><strong>Department:</strong> <span id="dbgDept">—</span></p>
+                <p><strong>Session ID:</strong> <span id="dbgSession">—</span></p>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-area" id="chatArea">
+            <!-- Messages will be added here -->
+        </div>
+
+        <!-- Suggestions -->
+        <div class="suggestions" id="suggestions"></div>
+
+        <!-- Keypad (DTMF mode) -->
+        <div class="keypad-container" id="keypadContainer" style="display:none;">
+            <div class="keypad-menu" id="keypadMenu"></div>
+            <div class="keypad-grid">
+                <button class="key-btn" data-key="1">1</button>
+                <button class="key-btn" data-key="2">2</button>
+                <button class="key-btn" data-key="3">3</button>
+                <button class="key-btn" data-key="4">4</button>
+                <button class="key-btn" data-key="5">5</button>
+                <button class="key-btn" data-key="6">6</button>
+                <button class="key-btn" data-key="7">7</button>
+                <button class="key-btn" data-key="8">8</button>
+                <button class="key-btn" data-key="9">9</button>
+                <button class="key-btn" data-key="*">*</button>
+                <button class="key-btn" data-key="0">0</button>
+                <button class="key-btn" data-key="#">#</button>
+            </div>
+            <div class="keypad-input-row">
+                <input type="text" id="keypadInput" placeholder="Digits..." readonly>
+                <button class="send-btn" id="keypadSendBtn">Call</button>
+            </div>
+        </div>
+
+        <!-- Input Area (Chat mode) -->
+        <div class="input-area" id="chatInputArea">
+            <button class="mic-btn" id="micBtn" title="Click to speak">🎤</button>
+            <input type="text" id="userInput" placeholder="Type your message or click 🎤 to speak..." autocomplete="off">
+            <button class="send-btn" id="sendBtn">Send</button>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="control-btn" id="resetBtn">🔄 Reset</button>
+            <button class="control-btn" id="muteBtn">🔊 TTS On</button>
+            <select class="voice-select" id="voiceSelect" title="Choose voice"></select>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

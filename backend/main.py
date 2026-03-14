@@ -1,17 +1,49 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from routes.ivr_routes import router
 from database.models import create_tables, seed_data
+import os
+
+# Load environment variables from .env if present
+try:
+    from dotenv import load_dotenv
+
+    # Prefer repo-root .env, but also support backend/services/.env (current project layout)
+    _here = os.path.dirname(__file__)
+    load_dotenv(os.path.join(_here, "..", ".env"))
+    load_dotenv(os.path.join(_here, "services", ".env"))
+except Exception:
+    pass
 
 app = FastAPI()
+
+# Allow frontend to call backend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 create_tables()
 seed_data()
 
 app.include_router(router, prefix="/ivr")
 
-@app.get("/")
-def begin():
-  return { "message": "Hospital Ivr is running"}
+# Serve frontend static files
+frontend_path = os.path.join(os.path.dirname(__file__), "..", "frontend")
+if os.path.exists(frontend_path):
+    app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+
+    @app.get("/")
+    def serve_frontend():
+        return FileResponse(os.path.join(frontend_path, "index.html"))
+else:
+    @app.get("/")
+    def begin():
+        return {"message": "Hospital IVR is running"}
 
 # IVR Simulator / Frontend
 # ↓

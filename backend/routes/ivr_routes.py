@@ -1,10 +1,15 @@
 from fastapi import APIRouter
+from fastapi.responses import Response
 from pydantic import BaseModel
+from typing import Optional
 from datetime import datetime
+import uuid
 
 from services.appointment_service import book_appointment
 from services.lab_service import check_lab_reports
 from services.billing_service import check_billing
+from services.conversation_service import process_message, reset_session
+from services.speech import text_to_speech, get_voices
 from database.connection import get_connection
 
 router = APIRouter()
@@ -22,6 +27,16 @@ class BookingInput(BaseModel):
 class EmergencyInput(BaseModel):
     phone: str
     type: str
+
+
+class ConversationInput(BaseModel):
+    session_id: Optional[str] = None
+    text: str
+
+
+class TTSInput(BaseModel):
+    text: str
+    voice: str = "asteria"
 
 
 # ──── LEVEL 0: MAIN MENU ────
@@ -265,3 +280,36 @@ def reception_connect(data: PhoneInput):
         "action": "transfer_call",
         "number": "+919876543210"
     }
+
+
+# ──── CONVERSATIONAL AI ENDPOINT ────
+
+
+@router.post("/converse")
+def converse(data: ConversationInput):
+    session_id = data.session_id or str(uuid.uuid4())
+    return process_message(session_id, data.text)
+
+
+@router.post("/converse/reset")
+def converse_reset(data: ConversationInput):
+    session_id = data.session_id or str(uuid.uuid4())
+    reset_session(session_id)
+    return process_message(session_id, "hi")
+
+
+# ──── DEEPGRAM TTS ────
+
+
+@router.get("/tts/voices")
+def tts_voices():
+    return get_voices()
+
+
+@router.post("/tts/speak")
+def tts_speak(data: TTSInput):
+    try:
+        audio_bytes = text_to_speech(data.text, data.voice)
+        return Response(content=audio_bytes, media_type="audio/mpeg")
+    except Exception as e:
+        return {"error": str(e)}

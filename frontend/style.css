@@ -1,0 +1,387 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.simulator {
+    width: 100%;
+    max-width: 500px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    max-height: 750px;
+}
+
+/* Header */
+.header {
+    background: linear-gradient(135deg, #1a73e8, #0d47a1);
+    color: white;
+    padding: 16px 20px;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 1.3rem;
+    margin-bottom: 2px;
+}
+
+.header p {
+    font-size: 0.8rem;
+    opacity: 0.85;
+}
+
+/* Debug */
+.debug-toggle {
+    padding: 6px 16px;
+    background: #f8f9fa;
+    font-size: 0.75rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.debug-panel {
+    display: none;
+    padding: 10px 16px;
+    background: #1e1e2e;
+    color: #a6e3a1;
+    font-family: 'Consolas', monospace;
+    font-size: 0.72rem;
+    border-bottom: 2px solid #0d47a1;
+}
+
+.debug-panel.visible {
+    display: block;
+}
+
+.debug-panel h3 {
+    color: #89b4fa;
+    margin-bottom: 6px;
+    font-size: 0.8rem;
+}
+
+.debug-panel p {
+    margin: 2px 0;
+}
+
+.debug-panel strong {
+    color: #f9e2af;
+}
+
+/* Chat Area */
+.chat-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #fafbfc;
+}
+
+.message {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    white-space: pre-line;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.message.system {
+    background: #e8f0fe;
+    color: #1a1a2e;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+.message.user {
+    background: #1a73e8;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.message.error {
+    background: #fce4ec;
+    color: #b71c1c;
+    align-self: center;
+    font-size: 0.8rem;
+}
+
+/* Typing indicator */
+.typing {
+    align-self: flex-start;
+    color: #888;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+}
+
+.typing::after {
+    content: '...';
+    animation: dots 1s steps(3, end) infinite;
+}
+
+@keyframes dots {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+}
+
+/* Suggestions */
+.suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 16px 8px;
+    min-height: 0;
+}
+
+.suggestion-btn {
+    background: #e8f0fe;
+    color: #1a73e8;
+    border: 1px solid #c2d7f5;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.suggestion-btn:hover {
+    background: #1a73e8;
+    color: white;
+}
+
+/* Input Area */
+.input-area {
+    display: flex;
+    padding: 10px 12px;
+    gap: 8px;
+    border-top: 1px solid #e0e0e0;
+    background: #fff;
+}
+
+#userInput {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 24px;
+    padding: 10px 16px;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+#userInput:focus {
+    border-color: #1a73e8;
+}
+
+.send-btn {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 18px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.send-btn:hover {
+    background: #1557b0;
+}
+
+.mic-btn {
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.mic-btn:hover {
+    background: #e0e0e0;
+}
+
+.mic-btn.listening {
+    background: #ef5350;
+    border-color: #ef5350;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 83, 80, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(239, 83, 80, 0); }
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px 12px 12px;
+    background: #fff;
+}
+
+.voice-select {
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 0.8rem;
+    max-width: 180px;
+    cursor: pointer;
+}
+
+.control-btn {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.control-btn:hover {
+    background: #e0e0e0;
+}
+
+/* Mode Switch */
+.mode-switch {
+    display: flex;
+    background: #f0f4f8;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.mode-btn {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    background: transparent;
+    font-size: 0.82rem;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+}
+
+.mode-btn.active {
+    color: #1a73e8;
+    font-weight: 600;
+    border-bottom: 2px solid #1a73e8;
+    background: #fff;
+}
+
+.mode-btn:hover:not(.active) {
+    background: #e8f0fe;
+}
+
+/* Keypad */
+.keypad-container {
+    padding: 10px 16px 6px;
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
+}
+
+.keypad-menu {
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    color: #444;
+}
+
+.keypad-menu .menu-option {
+    display: flex;
+    align-items: center;
+    padding: 4px 0;
+    gap: 8px;
+}
+
+.keypad-menu .menu-key {
+    background: #1a73e8;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+}
+
+.keypad-menu .menu-label {
+    color: #333;
+}
+
+.keypad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    max-width: 240px;
+    margin: 0 auto 8px;
+}
+
+.key-btn {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.1s;
+    color: #333;
+}
+
+.key-btn:hover {
+    background: #e0e0e0;
+}
+
+.key-btn:active {
+    background: #1a73e8;
+    color: white;
+    transform: scale(0.95);
+}
+
+.keypad-input-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+#keypadInput {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 24px;
+    padding: 8px 14px;
+    font-size: 1rem;
+    text-align: center;
+    letter-spacing: 2px;
+    background: #fafbfc;
+    font-weight: 600;
+}
