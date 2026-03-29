@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run backend app",
+			"type": "shell",
+			"command": "python run.py",
+			"isBackground": false,
+			"group": "build"
+		}
+	]
+}

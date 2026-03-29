@@ -1,7 +1,7 @@
 import os
 import httpx
 
-API_KEY = os.getenv("DEEPGRAM_API_KEY")
+API_KEY = "79299a6562368b870e9ab5fb32cae579b788ccb3"
 
 # Deepgram Aura TTS voices — https://developers.deepgram.com/docs/tts-models
 DEEPGRAM_VOICES = {
