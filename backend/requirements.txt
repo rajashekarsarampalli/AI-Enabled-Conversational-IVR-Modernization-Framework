@@ -1,0 +1,9 @@
+fastapi
+gunicorn
+uvicorn[standard]
+httpx
+python-dotenv
+pydantic
+pytest
+sqlite3 # (standard library, but some platforms require explicit listing)
+groq
