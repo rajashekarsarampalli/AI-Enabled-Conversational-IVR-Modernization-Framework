@@ -1,4 +1,4 @@
-const API_BASE = "http://127.0.0.1:8000/ivr";
+const API_BASE = window.API_BASE || "/ivr";
 
 // ──── STATE ────
 let sessionId = null;
@@ -90,7 +90,7 @@ async function sendMessage(text) {
 
     } catch (err) {
         removeTyping();
-        addMessage("Cannot connect to server. Make sure the backend is running on port 8000.", "error");
+        addMessage("Cannot connect to server. Please check backend availability.", "error");
     }
 }
 
